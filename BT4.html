@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+ function menu(width,height,title) {
+      return width,height,title,{
+        nhanhai : function () {
+         if ( typeof width === 'number'){
+         return width * 2
+         } else if ( typeof height === 'number'){
+           return height * 2
+         } else if ( typeof title === 'number'){
+           return title * 2
+         } else {
+           return 'Proprety  not a Number'
+         }
+        }
+   }
+ }
+ let result = menu(2,3,2);
+ console.log(result.nhanhai())
+</script>
+</body>
+</html>

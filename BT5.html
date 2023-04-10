@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+  let Computer = {
+    Read : function (a,b) {
+      this.property = a;
+      this.property1 = b;
+    },
+    Sum  :function () {
+      return this.property + this.property1;
+    },
+    Product :function () {
+      return this.property * this.property1;
+    }
+  };
+   Computer.Read(4,5);
+   console.log(Computer.Sum())
+  console.log(Computer.Product())
+  console.log(Computer)
+</script>
+</body>
+</html>
