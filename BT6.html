@@ -2,9 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
+<style>
+    input {
+        margin: 10px;
+    }
+</style>
+<input type="text" placeholder="Nhập Mã Sách" id="bookId">
+<input type="text" placeholder="Nhập Tên Sách " id="bookName">
+<input type="text" placeholder="Nhập Giá Sách" id="Price">
+<input type="text" placeholder="Nhập Tên Tác Giả" id="Author">
+<input type="checkbox" id="bookStatus" checked>
+<button onclick="addBook()" id="addButton">Tạo mới</button>
+<button id="saveButton" style="display:none;" onclick="saveEditedBook()">Save</button>
 
+<table class="table table-dark">
+    <thead>
+    <tr>
+        <th scope="col">Mã Sách</th>
+        <th scope="col">Tên Sách</th>
+        <th scope="col">Giá Sách</th>
+        <th scope="col">Tác Giả</th>
+        <th scope="col">Trạng Thái</th>
+    </tr>
+    </thead>
+    <tbody id="drawTable">
+    </tbody>
+</table>
+<script>
+    let bookList = [];
+
+    // Thêm dữ liệu sách và lưu vào mảng
+    function addBook() {
+        let bookId = document.getElementById("bookId").value;
+        let bookName = document.getElementById("bookName").value;
+        let author = document.getElementById("Author").value;
+        let price = document.getElementById("Price").value;
+        let status = document.getElementById("bookStatus").value;
+        let book = {
+            id: bookId,
+            name: bookName,
+            author: author,
+            price: price,
+            status:status
+        };
+        console.log(book)
+        bookList.push(book);
+        document.getElementById("bookId").value = "";
+        document.getElementById("bookName").value = "";
+        document.getElementById("Author").value = "";
+        document.getElementById("Price").value = "";
+        displayBooks();
+    }
+    // Hiển thị thông tin các sách
+    function displayBooks() {
+        let table = document.getElementById("drawTable");
+        let rows = "";
+        for (let i = 0; i < bookList.length; i++) {
+            rows += `<tr>
+              <td>${bookList[i].id}</td>
+              <td>${bookList[i].name}</td>
+              <td>${bookList[i].author}</td>
+              <td>${bookList[i].price}</td>
+               <td>${bookList[i].status}</td>
+              <td><button onclick="editBook(${i})">Edit</button></td>
+              <td><button onclick="deleteBook(${i})">Delete</button></td>
+            </tr>`;
+        }
+        table.innerHTML = rows;
+    }
+
+    // Cho phép cập nhật thông tin sách
+    function editBook(index) {
+        let newBookName = prompt("Nhập tên sách mới:");
+        let newAuthor = prompt("Nhập tác giả mới:");
+        let newPrice = prompt("Nhập giá mới:");
+        // const book = bookList[index];
+        bookList[index].name = newBookName;
+        bookList[index].author = newAuthor;
+        bookList[index].price = newPrice;
+
+        // document.getElementById('bookName').value = bookList[index].name
+        // document.getElementById('Author').value = bookList[index].author
+        // document.getElementById('Price').value = bookList[index].price
+        displayBooks();
+        // const bookNameInput = document.getElementById('bookName');
+        // const authorInput = document.getElementById('Author');
+        // const priceInput = document.getElementById('Price');
+
+        // bookNameInput.value = book.name;
+        // authorInput.value = book.author;
+        // priceInput.value = book.price;
+
+    }
+    function deleteBook(index) {
+        bookList.splice(index,1)
+        displayBooks()
+    }
+
+
+</script>
 </body>
 </html>
