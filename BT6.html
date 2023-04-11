@@ -10,13 +10,23 @@
     input {
         margin: 10px;
     }
+    span {
+        color: red;
+        font-style: italic;
+    }
 </style>
-<label for="bookId"></label><input type="text" placeholder="Nhập Mã Sách" id="bookId">
+<label for="bookId"></label><input type="text" placeholder="Nhập Mã Sách" id="bookId" required>
 <label for="bookName"></label><input type="text" placeholder="Nhập Tên Sách " id="bookName">
 <label for="Price"></label><input type="text" placeholder="Nhập Giá Sách" id="Price">
 <label for="Author"></label><input type="text" placeholder="Nhập Tên Tác Giả" id="Author">
 <label for="bookStatus"></label><input type="checkbox" id="bookStatus" checked>
+<label for="search"></label><input type="search" id="search" oninput="Search()">
 <button onclick="addBook()" id="addButton">Tạo mới</button>
+<p style="text-align: center">
+    <span id="validate"></span>
+</p>
+<div id="error-message"></div>
+
 <table class="table table-dark">
     <thead>
     <tr>
@@ -32,6 +42,7 @@
 </table>
 <script>
     let bookList = [];
+    let  listSearch = [];
 
     // Thêm dữ liệu sách và lưu vào mảng
     function addBook() {
@@ -40,21 +51,31 @@
         let author = document.getElementById("Author").value;
         let price = document.getElementById("Price").value;
         let status = document.getElementById("bookStatus").value;
-        let book = {
-            id: bookId,
-            name: bookName,
-            author: author,
-            price: price,
-            status:status
-        };
-        console.log(book)
-        bookList.push(book);
-        document.getElementById("bookId").value = "";
-        document.getElementById("bookName").value = "";
-        document.getElementById("Author").value = "";
-        document.getElementById("Price").value = "";
-        displayBooks();
+
+        let validateMsg = document.getElementById('validate');
+        validateMsg.innerHTML = "";
+
+        if (bookId.trim() === "" || bookName.trim() === "" || author.trim() === "" || price.trim() === "") {
+            validateMsg.innerHTML = "Vui lòng điền đầy đủ thông tin.";
+        } else {
+            let book = {
+                id: bookId,
+                name: bookName,
+                author: author,
+                price: price,
+                status: status
+            };
+            console.log(book)
+            bookList.push(book);
+            document.getElementById("bookId").value = "";
+            document.getElementById("bookName").value = "";
+            document.getElementById("Author").value = "";
+            document.getElementById("Price").value = "";
+            sortPrice()
+            displayBooks();
+        }
     }
+
     // Hiển thị thông tin các sách
     function displayBooks() {
         let table = document.getElementById("drawTable");
@@ -99,6 +120,40 @@
     function deleteBook(index) {
         bookList.splice(index,1)
         displayBooks()
+    }
+    function sortPrice() {
+        bookList = bookList.sort((book1,book2) =>book1.price - book2.price);
+        displayBooks()
+    }
+    function Search() {
+        let valueSearch = document.getElementById('search').value;
+        if (valueSearch.trim()=== ""){
+           displayBooks()
+        }else {
+            listSearch = [];
+            for (let i = 0;i<bookList.length;i++){
+                if (bookList[i].name.toLowerCase().search(valueSearch.toLowerCase())!==-1){
+                    listSearch.push(bookList[i])
+                }
+            }
+            showListSearch();
+        }
+    }
+    function showListSearch() {
+        let drawTable = '';
+        for (let i = 0; i < listSearch.length; i++) {
+            drawTable += `<tr>
+
+                               <td>${listSearch[i].id}</td>
+                             <td>${listSearch[i].name}</td>
+              <td>${listSearch[i].author}</td>
+              <td>${listSearch[i].price}</td>
+               <td>${listSearch[i].status}</td>
+              <td><button onclick="editBook(${i})">Edit</button></td>
+              <td><button onclick="deleteBook(${i})">Delete</button></td>
+                           </tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
     }
 
 
